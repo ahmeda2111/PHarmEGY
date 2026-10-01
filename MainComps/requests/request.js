@@ -1,6 +1,6 @@
 
 import { supabase } from "../lib/supabase";
-import { queries } from "../queries/index";
+import { queries } from "../Queries/index";
 
 export async function request(queryName, params = {}) {
   const query = queries[queryName];
