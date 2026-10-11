@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { saveProduct } from "../../../lib/adminActions";
 import { useAuth } from "../../../lib/useAuth";
+import { useToast } from "../../../lib/useToast";
 import { request } from "../../../requests/request";
 import AdminGuard from "./AdminGuard";
 
@@ -23,6 +24,7 @@ const emptyForm = {
 export default function AdminProductFormScreen({ productId }) {
   const router = useRouter();
   const { profile } = useAuth();
+  const { showToast } = useToast();
   const [form, setForm] = useState(emptyForm);
   const [companies, setCompanies] = useState([]);
   const [error, setError] = useState("");
@@ -83,6 +85,7 @@ export default function AdminProductFormScreen({ productId }) {
         },
         profile
       );
+      showToast(isEdit ? "Product updated." : "Product added.");
       router.push("/admin/products");
       router.refresh();
     } catch (saveError) {
@@ -121,7 +124,7 @@ export default function AdminProductFormScreen({ productId }) {
                   onChange={(event) =>
                     setForm((current) => ({ ...current, name: event.target.value }))
                   }
-                  className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                  className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
                 />
               </label>
 
@@ -134,7 +137,7 @@ export default function AdminProductFormScreen({ productId }) {
                   onChange={(event) =>
                     setForm((current) => ({ ...current, type: event.target.value }))
                   }
-                  className="mt-2 w-full appearance-none rounded-lg border border-slate-300 bg-white bg-[length:16px] bg-[right_12px_center] bg-no-repeat px-4 py-3 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                  className="mt-2 w-full appearance-none rounded-lg border border-slate-300 bg-white bg-[length:16px] bg-[right_12px_center] bg-no-repeat px-4 py-3 text-slate-900 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
                   style={{
                     backgroundImage:
                       "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E\")",
@@ -160,7 +163,7 @@ export default function AdminProductFormScreen({ productId }) {
                       company_id: event.target.value,
                     }))
                   }
-                  className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                  className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
                 >
                   <option value="">No company</option>
                   {companies.map((company) => (
@@ -184,7 +187,7 @@ export default function AdminProductFormScreen({ productId }) {
                       description: event.target.value,
                     }))
                   }
-                  className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                  className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
                 />
               </label>
 

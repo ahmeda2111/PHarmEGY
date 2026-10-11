@@ -20,7 +20,7 @@ export default function AuthField({
         inputMode={inputMode}
         placeholder={placeholder}
         onChange={(event) => onChange(event.target.value)}
-        className={`mt-2 w-full rounded-lg border px-4 py-3 text-slate-900 outline-none transition focus:ring-2 ${
+        className={`mt-2 w-full rounded-lg border bg-white px-4 py-3 text-slate-900 outline-none transition focus:ring-2 ${
           error
             ? "border-red-400 focus:border-red-500 focus:ring-red-100"
             : "border-slate-300 focus:border-blue-600 focus:ring-blue-100"

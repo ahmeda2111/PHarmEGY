@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { saveCompany } from "../../../lib/adminActions";
 import { useAuth } from "../../../lib/useAuth";
+import { useToast } from "../../../lib/useToast";
 import { request } from "../../../requests/request";
 import AdminGuard from "./AdminGuard";
 
@@ -17,6 +18,7 @@ const emptyForm = {
 export default function AdminCompanyFormScreen({ companyId }) {
   const router = useRouter();
   const { profile } = useAuth();
+  const { showToast } = useToast();
   const [form, setForm] = useState(emptyForm);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(Boolean(companyId));
@@ -72,6 +74,7 @@ export default function AdminCompanyFormScreen({ companyId }) {
         },
         profile
       );
+      showToast(isEdit ? "Company updated." : "Company added.");
       router.push("/admin/companies");
       router.refresh();
     } catch (saveError) {
@@ -110,7 +113,7 @@ export default function AdminCompanyFormScreen({ companyId }) {
                   onChange={(event) =>
                     setForm((current) => ({ ...current, name: event.target.value }))
                   }
-                  className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                  className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
                 />
               </label>
 
@@ -144,7 +147,7 @@ export default function AdminCompanyFormScreen({ companyId }) {
                       description: event.target.value,
                     }))
                   }
-                  className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                  className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
                 />
               </label>
 

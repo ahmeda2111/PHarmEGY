@@ -2,10 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { deleteProduct } from "../../../lib/adminActions";
+import { useToast } from "../../../lib/useToast";
 import { request } from "../../../requests/request";
 import AdminGuard from "./AdminGuard";
 
 export default function AdminProductsScreen() {
+  const { showToast } = useToast();
   const [products, setProducts] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -27,6 +30,16 @@ export default function AdminProductsScreen() {
 
     load();
   }, []);
+
+  const handleDelete = async (product) => {
+    try {
+      await deleteProduct(product.id);
+      setProducts((current) => current.filter((item) => item.id !== product.id));
+      showToast("Product deleted.", "delete");
+    } catch (deleteError) {
+      setError(deleteError.message);
+    }
+  };
 
   return (
     <AdminGuard>
@@ -84,13 +97,22 @@ export default function AdminProductsScreen() {
                         <td className="px-6 py-4 text-slate-600">
                           {product.company?.name || "—"}
                         </td>
-                        <td className="px-6 py-4 text-right">
-                          <Link
-                            href={`/admin/products/${product.id}`}
-                            className="font-semibold text-blue-600 hover:text-blue-700"
-                          >
-                            Edit
-                          </Link>
+                        <td className="px-6 py-4">
+                          <div className="flex justify-end gap-4">
+                            <Link
+                              href={`/admin/products/${product.id}`}
+                              className="font-semibold text-blue-600 hover:text-blue-700"
+                            >
+                              Edit
+                            </Link>
+                            <button
+                              type="button"
+                              onClick={() => handleDelete(product)}
+                              className="font-semibold text-red-600 hover:text-red-700"
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}

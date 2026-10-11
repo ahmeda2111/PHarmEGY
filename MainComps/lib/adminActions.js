@@ -1,3 +1,4 @@
+"use client";
 
 import { supabase } from "./supabase";
 
@@ -96,4 +97,14 @@ export async function saveCompany(values, profile) {
   if (error) throw error;
 
   return data;
+}
+
+export async function deleteProduct(id) {
+  const { error } = await supabase.from("Products").delete().eq("id", id);
+  if (error) throw error;
+}
+
+export async function deleteCompany(id) {
+  const { error } = await supabase.from("Companies").delete().eq("id", id);
+  if (error) throw error;
 }
