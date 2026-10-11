@@ -151,15 +151,15 @@ export async function signUpAccount(form) {
     return { error: error.message, fieldErrors };
   }
 
-  if (data.user) {
-    try {
-      await ensureUserProfile(data.user, { fullName, phone, email });
-    } catch (profileError) {
-      if (data.session) {
-        return { error: profileError.message, fieldErrors };
-      }
-    }
-  }
+  // if (data.user) {
+  //   try {
+  //     await ensureUserProfile(data.user, { fullName, phone, email });
+  //   } catch (profileError) {
+  //     if (data.session) {
+  //       return { error: profileError.message, fieldErrors };
+  //     }
+  //   }
+  // }
 
   if (!data.session) {
     return {
@@ -214,8 +214,14 @@ export async function signInAccount({ identifier, password }) {
     };
   }
 
-  const profile = await ensureUserProfile(data.user);
+  const profile = await getProfileForAuthUser(data.user);
 
+  if (!profile) {
+    return {
+      error: "Your account profile was not found. Please contact support.",
+      fieldErrors: {},
+    };
+  }
   if (profile?.status && profile.status !== ACTIVE_STATUS) {
     await supabase.auth.signOut();
     return {
