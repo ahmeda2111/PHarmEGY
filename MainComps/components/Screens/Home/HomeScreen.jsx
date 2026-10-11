@@ -7,7 +7,6 @@ import HeroSection from "../../comps/home/HeroSection";
 // import ExploreSection from "../../comps/home/ExploreSection";
 import ProductsSection from "../../comps/home/ProductsSection";
 import CTASection from "../../comps/home/CTASection";
-import TopBar from "../../comps/home/TopBar";
 
 import { request } from "../../../requests/request";
 
@@ -38,7 +37,6 @@ export default function HomeScreen() {
 
   return (
     <main className="min-h-screen bg-white">
-      <TopBar />
       <HeroSection />
       {/* <ExploreSection /> */}
 
