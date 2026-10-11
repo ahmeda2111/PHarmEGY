@@ -3,6 +3,8 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { isStaffRole } from "../../../lib/roles";
+import { useAuth } from "../../../lib/useAuth";
 import UserMenu from "./UserMenu";
 
 const productTypes = [
@@ -11,8 +13,10 @@ const productTypes = [
 ];
 
 export default function TopBar() {
+  const { user, profile } = useAuth();
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
+  const showAdmin = isStaffRole(profile?.role || user?.user_metadata?.role);
 
   useEffect(() => {
     if (!open) return;
@@ -102,7 +106,17 @@ export default function TopBar() {
             </Link>
           </div>
 
-          <UserMenu />
+          <div className="flex items-center gap-2 sm:gap-3">
+            {showAdmin ? (
+              <Link
+                href="/admin"
+                className="rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 sm:px-4"
+              >
+                Admin Panel
+              </Link>
+            ) : null}
+            <UserMenu />
+          </div>
         </div>
       </div>
     </section>

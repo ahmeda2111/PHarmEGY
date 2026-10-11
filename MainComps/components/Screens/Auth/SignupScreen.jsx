@@ -15,13 +15,11 @@ export default function SignupScreen() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
-    setSuccess("");
     setLoading(true);
 
     try {
@@ -41,7 +39,9 @@ export default function SignupScreen() {
       }
 
       if (result.needsConfirmation) {
-        setSuccess("Account created. Check your email to confirm, then log in.");
+        router.push(
+          `/check-email?email=${encodeURIComponent(result.email || email)}`
+        );
         return;
       }
 
@@ -122,12 +122,6 @@ export default function SignupScreen() {
           {error ? (
             <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
               {error}
-            </p>
-          ) : null}
-
-          {success ? (
-            <p className="rounded-lg bg-green-50 px-4 py-3 text-sm text-green-700">
-              {success}
             </p>
           ) : null}
 

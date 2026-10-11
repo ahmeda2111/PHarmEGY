@@ -1,3 +1,4 @@
+import { getAuthRedirectUrl } from "./siteUrl";
 import { supabase } from "./supabase";
 import {
   isEmail,
@@ -138,6 +139,7 @@ export async function signUpAccount(form) {
     email,
     password: form.password,
     options: {
+      emailRedirectTo: getAuthRedirectUrl(),
       data: {
         full_name: fullName,
         phone,
@@ -149,6 +151,13 @@ export async function signUpAccount(form) {
 
   if (error) {
     return { error: error.message, fieldErrors };
+  }
+
+  if (data.user?.identities && data.user.identities.length === 0) {
+    return {
+      error: "This email is already registered. Confirm it or log in.",
+      fieldErrors: { ...fieldErrors, email: "This email is already registered." },
+    };
   }
 
   // if (data.user) {
@@ -165,6 +174,7 @@ export async function signUpAccount(form) {
     return {
       error: "",
       needsConfirmation: true,
+      email,
       fieldErrors,
     };
   }
@@ -208,6 +218,19 @@ export async function signInAccount({ identifier, password }) {
   });
 
   if (error) {
+    const unconfirmed =
+      error.code === "email_not_confirmed" ||
+      /not confirmed/i.test(error.message || "");
+
+    if (unconfirmed) {
+      return {
+        error:
+          "A confirmation email was sent to you. Confirm it before logging in, and check Spam if you don't see it.",
+        needsConfirmation: true,
+        fieldErrors: {},
+      };
+    }
+
     return {
       error: "Invalid phone number, email, or password.",
       fieldErrors: {},

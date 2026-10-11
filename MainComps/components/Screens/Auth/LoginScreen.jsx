@@ -12,20 +12,13 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [error, setError] = useState("");
+  const [needsConfirmation, setNeedsConfirmation] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const handleIdentifierChange = (value) => {
-    if (value.includes("@")) {
-      setIdentifier(value);
-      return;
-    }
-
-    setIdentifier(value.replace(/[A-Za-z]/g, ""));
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
+    setNeedsConfirmation(false);
     setLoading(true);
 
     try {
@@ -33,6 +26,7 @@ export default function LoginScreen() {
       setFieldErrors(result.fieldErrors || {});
 
       if (result.error) {
+        setNeedsConfirmation(Boolean(result.needsConfirmation));
         setError(result.error);
         return;
       }
@@ -59,7 +53,7 @@ export default function LoginScreen() {
             id="login-identifier"
             label="Email or phone number"
             value={identifier}
-            onChange={handleIdentifierChange}
+            onChange={setIdentifier}
             error={fieldErrors.identifier}
             autoComplete="username"
             placeholder="email@example.com or 01012345678"
@@ -76,7 +70,13 @@ export default function LoginScreen() {
           />
 
           {error ? (
-            <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
+            <p
+              className={`rounded-lg px-4 py-3 text-sm ${
+                needsConfirmation
+                  ? "bg-amber-50 text-amber-800"
+                  : "bg-red-50 text-red-700"
+              }`}
+            >
               {error}
             </p>
           ) : null}

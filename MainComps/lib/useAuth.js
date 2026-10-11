@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { getProfileForAuthUser } from "./authActions";
 import { supabase } from "./supabase";
+
+const AuthContext = createContext(null);
 
 export function getUserName(user, profile) {
   if (profile?.full_name) return profile.full_name;
@@ -20,7 +22,7 @@ export function getUserAvatar(user) {
   return user?.user_metadata?.avatar_url || user?.user_metadata?.picture || "";
 }
 
-export function useAuth() {
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [ready, setReady] = useState(false);
@@ -53,8 +55,9 @@ export function useAuth() {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      syncUser(session?.user ?? null);
-      setReady(true);
+      syncUser(session?.user ?? null).then(() => {
+        if (active) setReady(true);
+      });
     });
 
     return () => {
@@ -67,5 +70,20 @@ export function useAuth() {
     await supabase.auth.signOut();
   };
 
-  return { user, profile, ready, signOut };
+  const value = useMemo(
+    () => ({ user, profile, ready, signOut }),
+    [user, profile, ready]
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+
+  return context;
 }
