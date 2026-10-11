@@ -11,7 +11,7 @@ export default function CTASection() {
 
         <p className="mx-auto mt-4 max-w-2xl text-blue-100">
           Discover pharmaceutical and cosmetic products available through
-          PharmaHub.
+          PHarmEGY.
         </p>
 
         <Link

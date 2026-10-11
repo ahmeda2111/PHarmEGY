@@ -10,7 +10,7 @@ export default function AboutScreen() {
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
               <p className="text-sm font-semibold uppercase tracking-wider text-blue-600">
-                About PharmaHub
+                About PHarmEGY
               </p>
 
               <h1 className="mt-4 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
@@ -18,7 +18,7 @@ export default function AboutScreen() {
               </h1>
 
               <p className="mt-6 text-lg leading-8 text-slate-600">
-                PharmaHub is a commercial and marketing platform that
+                PHarmEGY is a commercial and marketing platform that
                 connects pharmaceutical companies with the products they
                 provide. We receive product information from our partner
                 companies and make their pharmaceutical and cosmetic
@@ -45,13 +45,11 @@ export default function AboutScreen() {
             <div className="flex justify-center">
               <div className="flex h-96 w-full max-w-lg items-center justify-center rounded-3xl bg-blue-100">
                 <div className="text-center">
-                  <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-3xl bg-white text-5xl shadow-sm">
-                    💊
-                  </div>
-
-                  <h2 className="mt-6 text-2xl font-bold text-slate-800">
-                    PharmaHub
-                  </h2>
+                  <img
+                    src="/assets/01_Full_Logo/PHarmEGY_Full_Transparent_512px.png"
+                    alt="PHarmEGY"
+                    className="mx-auto h-44 w-auto"
+                  />
 
                   <p className="mt-2 text-slate-500">
                     Pharmaceutical & Healthcare Platform
@@ -76,7 +74,7 @@ export default function AboutScreen() {
             </h2>
 
             <p className="mt-6 text-lg leading-8 text-slate-600">
-              PharmaHub works with pharmaceutical companies to receive their
+              PHarmEGY works with pharmaceutical companies to receive their
               products and showcase them through our platform. Our goal is to
               create a simple and organized place where products can be
               discovered, explored, and connected to the companies behind
@@ -84,7 +82,7 @@ export default function AboutScreen() {
             </p>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">
-              Companies can become partners with PharmaHub, while their
+              Companies can become partners with PHarmEGY, while their
               products can be presented across our platform under clear
               categories such as medicines and cosmetics.
             </p>
@@ -132,7 +130,7 @@ export default function AboutScreen() {
 
               <p className="mt-3 leading-7 text-slate-600">
                 Explore the pharmaceutical companies connected with the
-                products available on PharmaHub.
+                products available on PHarmEGY.
               </p>
             </div>
 
@@ -146,7 +144,7 @@ export default function AboutScreen() {
               </h3>
 
               <p className="mt-3 leading-7 text-slate-600">
-                PharmaHub provides a digital platform for showcasing and
+                PHarmEGY provides a digital platform for showcasing and
                 promoting products from pharmaceutical companies.
               </p>
             </div>
@@ -239,7 +237,7 @@ export default function AboutScreen() {
 
               <p className="mt-5 max-w-xl leading-7 text-slate-600">
                 Whether you are looking to explore our products, learn more
-                about PharmaHub, or discuss a potential partnership, our team
+                about PHarmEGY, or discuss a potential partnership, our team
                 is ready to hear from you.
               </p>
 
@@ -271,7 +269,7 @@ export default function AboutScreen() {
                     </h3>
 
                     <p className="mt-1 text-slate-600">
-                      info@pharmahub.com
+                      info@pharmegy.com
                     </p>
                   </div>
                 </div>
@@ -303,7 +301,7 @@ export default function AboutScreen() {
                   </div>
 
                   <h3 className="mt-6 text-2xl font-bold text-white">
-                    PharmaHub
+                    PHarmEGY
                   </h3>
 
                   <p className="mt-3 text-slate-300">
@@ -324,7 +322,7 @@ export default function AboutScreen() {
       <section className="bg-blue-600">
         <div className="mx-auto max-w-4xl px-6 py-16 text-center lg:px-8">
           <h2 className="text-3xl font-bold text-white">
-            Explore PharmaHub
+            Explore PHarmEGY
           </h2>
 
           <p className="mt-4 text-lg leading-8 text-blue-100">

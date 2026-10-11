@@ -8,7 +8,7 @@ export default function HeroSection() {
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
             <span className="inline-flex rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700">
-              PharmaHub
+              PHarmEGY
             </span>
 
             <h1 className="mt-6 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
@@ -43,15 +43,13 @@ export default function HeroSection() {
           <div className="flex justify-center">
             <div className="flex h-80 w-full max-w-lg items-center justify-center rounded-3xl bg-blue-100">
               <div className="text-center">
-                <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-2xl bg-white text-4xl shadow-sm">
-                  💊
-                </div>
+                <img
+                  src="/assets/01_Full_Logo/PHarmEGY_Full_Transparent_512px.png"
+                  alt="PHarmEGY"
+                  className="mx-auto h-40 w-auto"
+                />
 
-                <p className="mt-6 text-xl font-semibold text-slate-700">
-                  PharmaHub
-                </p>
-
-                <p className="mt-2 text-sm text-slate-500">
+                <p className="mt-4 text-sm text-slate-500">
                   Pharmaceutical Products Platform
                 </p>
               </div>

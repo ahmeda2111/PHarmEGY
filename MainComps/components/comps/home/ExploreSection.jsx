@@ -16,7 +16,7 @@ export default function ExploreSection() {
 
           <p className="mx-auto mt-4 max-w-2xl text-slate-600">
             Discover pharmaceutical and cosmetic products from trusted
-            pharmaceutical companies through PharmaHub.
+            pharmaceutical companies through PHarmEGY.
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-4">
