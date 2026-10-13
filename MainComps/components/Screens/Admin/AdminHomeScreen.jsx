@@ -14,6 +14,11 @@ const cards = [
     title: "Companies",
     description: "Add partner companies and update their information.",
   },
+  {
+    href: "/admin/users",
+    title: "Users",
+    description: "Upgrade a user's role or set a new password when they call.",
+  },
 ];
 
 export default function AdminHomeScreen() {
@@ -28,10 +33,11 @@ export default function AdminHomeScreen() {
             Manage PHarmEGY data
           </h1>
           <p className="mt-3 max-w-2xl text-slate-600">
-            Add or edit products and companies shown on the site.
+            Add or edit products and companies shown on the site, and manage user
+            accounts.
           </p>
 
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
             {cards.map((card) => (
               <Link
                 key={card.href}

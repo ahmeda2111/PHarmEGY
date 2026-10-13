@@ -1,5 +1,6 @@
 "use client";
 
+import { request } from "../requests/request";
 import { supabase } from "./supabase";
 
 export async function saveProduct(values, profile) {
@@ -107,4 +108,60 @@ export async function deleteProduct(id) {
 export async function deleteCompany(id) {
   const { error } = await supabase.from("Companies").delete().eq("id", id);
   if (error) throw error;
+}
+
+async function getAccessToken() {
+  const { data, error } = await supabase.auth.getSession();
+  if (error) throw error;
+
+  const token = data.session?.access_token;
+  if (!token) {
+    throw new Error("Not signed in.");
+  }
+
+  return token;
+}
+
+export async function listManagedUsers() {
+  try {
+    const token = await getAccessToken();
+    const response = await fetch("/api/admin/users", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      const payload = await response.json();
+      return payload.users || [];
+    }
+  } catch {
+    // Fall back to a direct table query when the admin API is not configured.
+  }
+
+  const data = await request("Users", {
+    sort: { field: "created_at", direction: "desc" },
+  });
+
+  return data || [];
+}
+
+export async function updateManagedUser({ id, role, password }) {
+  const token = await getAccessToken();
+  const response = await fetch("/api/admin/users", {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ id, role, password }),
+  });
+
+  const payload = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(payload.error || "Could not update user.");
+  }
+
+  return payload.user;
 }

@@ -1,6 +1,9 @@
-import { getProductsQuery } from "./Products"; 
+import { getProductsQuery } from "./Products";
 import { getCompaniesQuery } from "./companies";
-export const queries = { 
-"Products": getProductsQuery, 
-"Companies": getCompaniesQuery,
+import { getUsersQuery } from "./users";
+
+export const queries = {
+  Products: getProductsQuery,
+  Companies: getCompaniesQuery,
+  Users: getUsersQuery,
 };

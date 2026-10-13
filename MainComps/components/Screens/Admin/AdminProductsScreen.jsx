@@ -100,6 +100,12 @@ export default function AdminProductsScreen() {
                         <td className="px-6 py-4">
                           <div className="flex justify-end gap-4">
                             <Link
+                              href={`/products/${product.id}`}
+                              className="font-semibold text-slate-600 hover:text-slate-900"
+                            >
+                              View
+                            </Link>
+                            <Link
                               href={`/admin/products/${product.id}`}
                               className="font-semibold text-blue-600 hover:text-blue-700"
                             >

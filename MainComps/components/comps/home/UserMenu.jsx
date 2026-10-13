@@ -81,19 +81,21 @@ export default function UserMenu() {
 
   if (!user) {
     return (
-      <div className="flex items-center gap-2 py-3 sm:gap-3">
-        <EmptyAvatar />
+      <div className="flex min-w-0 items-center gap-2 py-2">
+        <span className="hidden sm:inline-flex">
+          <EmptyAvatar />
+        </span>
 
         <Link
           href="/login"
-          className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 sm:px-4"
+          className="rounded-lg bg-blue-600 px-2.5 py-2 text-xs font-semibold text-white transition hover:bg-blue-700 sm:px-4 sm:text-sm"
         >
           Log in
         </Link>
 
         <Link
           href="/signup"
-          className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 sm:px-4"
+          className="rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 sm:px-4 sm:text-sm"
         >
           Sign up
         </Link>
@@ -104,20 +106,20 @@ export default function UserMenu() {
   const name = getUserName(user, profile);
 
   return (
-    <div className="relative py-2" ref={menuRef}>
+    <div className="relative min-w-0 py-2" ref={menuRef}>
       <button
         type="button"
         aria-expanded={open}
         aria-haspopup="menu"
         onClick={() => setOpen((value) => !value)}
-        className="flex max-w-[12rem] items-center gap-2 rounded-full py-1 pl-1 pr-2 transition hover:bg-slate-50 sm:max-w-xs sm:pr-3"
+        className="flex max-w-[9.5rem] min-w-0 items-center gap-2 rounded-full py-1 pl-1 pr-1.5 transition hover:bg-slate-50 sm:max-w-[12rem] sm:pr-3"
       >
         <UserAvatar user={user} profile={profile} />
-        <span className="truncate text-sm font-semibold text-slate-800">
+        <span className="hidden truncate text-sm font-semibold text-slate-800 sm:inline">
           {name}
         </span>
         <svg
-          className={`h-4 w-4 shrink-0 text-slate-500 transition ${open ? "rotate-180" : ""}`}
+          className={`hidden h-4 w-4 shrink-0 text-slate-500 transition sm:block ${open ? "rotate-180" : ""}`}
           viewBox="0 0 20 20"
           fill="currentColor"
           aria-hidden="true"
@@ -133,7 +135,7 @@ export default function UserMenu() {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-full z-30 mt-1 w-56 rounded-xl border border-slate-200 bg-white p-2 shadow-lg"
+          className="absolute right-0 top-full z-30 mt-1 w-[min(14rem,calc(100vw-2rem))] rounded-xl border border-slate-200 bg-white p-2 shadow-lg"
         >
           {accountLinks.map((item) => (
             <Link

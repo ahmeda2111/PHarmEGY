@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -14,22 +13,26 @@ const productTypes = [
 
 export default function TopBar() {
   const { user, profile } = useAuth();
-  const [open, setOpen] = useState(false);
+  const [productsOpen, setProductsOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const menuRef = useRef(null);
+  const barRef = useRef(null);
   const showAdmin = isStaffRole(profile?.role || user?.user_metadata?.role);
 
   useEffect(() => {
-    if (!open) return;
+    if (!productsOpen && !mobileOpen) return;
 
     const handlePointerDown = (event) => {
-      if (!menuRef.current?.contains(event.target)) {
-        setOpen(false);
+      if (!barRef.current?.contains(event.target)) {
+        setProductsOpen(false);
+        setMobileOpen(false);
       }
     };
 
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
-        setOpen(false);
+        setProductsOpen(false);
+        setMobileOpen(false);
       }
     };
 
@@ -40,32 +43,58 @@ export default function TopBar() {
       document.removeEventListener("pointerdown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [open]);
+  }, [mobileOpen, productsOpen]);
+
+  const closeMenus = () => {
+    setProductsOpen(false);
+    setMobileOpen(false);
+  };
 
   return (
-    <section className="border-b border-slate-200 bg-white">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex min-w-0 items-center gap-4 sm:gap-8">
-            <Link href="/" className="shrink-0 py-3">
-              <img
-                src="/assets/05_Wordmark/PHarmEGY_Wordmark_Transparent.png"
-                alt="PHarmEGY"
-                className="h-8 w-auto"
-              />
-            </Link>
+    <header ref={barRef} className="sticky top-0 z-40 overflow-x-clip border-b border-slate-200 bg-white">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 min-w-0 items-center gap-2 sm:gap-3">
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-slate-700 hover:bg-slate-100 md:hidden"
+            aria-expanded={mobileOpen}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            onClick={() => {
+              setMobileOpen((value) => !value);
+              setProductsOpen(false);
+            }}
+          >
+            {mobileOpen ? (
+              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            ) : (
+              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" d="M4 7h16M4 12h16M4 17h16" />
+              </svg>
+            )}
+          </button>
 
+          <Link href="/" className="min-w-0 shrink py-2" onClick={closeMenus}>
+            <img
+              src="/assets/05_Wordmark/PHarmEGY_Wordmark_Transparent.png"
+              alt="PHarmEGY"
+              className="h-7 w-auto max-w-[9.5rem] object-contain object-left sm:h-8 sm:max-w-none"
+            />
+          </Link>
+
+          <nav className="hidden min-w-0 flex-1 items-center gap-1 md:flex lg:gap-2">
             <div className="relative" ref={menuRef}>
               <button
                 type="button"
-                aria-expanded={open}
+                aria-expanded={productsOpen}
                 aria-haspopup="menu"
-                onClick={() => setOpen((value) => !value)}
-                className="inline-flex items-center gap-1 border-b-2 border-blue-600 px-3 py-5 font-semibold text-blue-600 sm:px-4"
+                onClick={() => setProductsOpen((value) => !value)}
+                className="inline-flex items-center gap-1 border-b-2 border-blue-600 px-3 py-4 font-semibold text-blue-600 lg:px-4"
               >
                 Products
                 <svg
-                  className={`h-4 w-4 transition ${open ? "rotate-180" : ""}`}
+                  className={`h-4 w-4 transition ${productsOpen ? "rotate-180" : ""}`}
                   viewBox="0 0 20 20"
                   fill="currentColor"
                   aria-hidden="true"
@@ -78,7 +107,7 @@ export default function TopBar() {
                 </svg>
               </button>
 
-              {open && (
+              {productsOpen ? (
                 <div
                   role="menu"
                   className="absolute left-0 top-full z-30 min-w-48 rounded-b-xl border border-t-0 border-slate-200 bg-white p-2 shadow-lg"
@@ -88,37 +117,71 @@ export default function TopBar() {
                       key={item.type}
                       href={`/view-list?entity=products&type=${item.type}`}
                       role="menuitem"
-                      onClick={() => setOpen(false)}
+                      onClick={closeMenus}
                       className="block rounded-lg px-4 py-3 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600"
                     >
                       {item.label}
                     </Link>
                   ))}
                 </div>
-              )}
+              ) : null}
             </div>
 
             <Link
               href="/view-list?entity=companies"
-              className="px-3 py-5 font-semibold text-slate-700 hover:text-blue-600 sm:px-4"
+              className="px-3 py-4 font-semibold text-slate-700 hover:text-blue-600 lg:px-4"
             >
               Companies
             </Link>
-          </div>
+          </nav>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="ml-auto flex min-w-0 shrink-0 items-center gap-2">
             {showAdmin ? (
               <Link
                 href="/admin"
-                className="rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 sm:px-4"
+                className="hidden rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 sm:inline-flex"
               >
-                Admin Panel
+                Admin
               </Link>
             ) : null}
             <UserMenu />
           </div>
         </div>
+
+        {mobileOpen ? (
+          <nav className="space-y-1 border-t border-slate-200 py-3 md:hidden">
+            <p className="px-2 pb-1 text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Products
+            </p>
+            {productTypes.map((item) => (
+              <Link
+                key={item.type}
+                href={`/view-list?entity=products&type=${item.type}`}
+                onClick={closeMenus}
+                className="block rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+              >
+                {item.label}
+              </Link>
+            ))}
+            <Link
+              href="/view-list?entity=companies"
+              onClick={closeMenus}
+              className="block rounded-lg px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+            >
+              Companies
+            </Link>
+            {showAdmin ? (
+              <Link
+                href="/admin"
+                onClick={closeMenus}
+                className="block rounded-lg px-3 py-2.5 text-sm font-semibold text-slate-900 hover:bg-slate-100 sm:hidden"
+              >
+                Admin Panel
+              </Link>
+            ) : null}
+          </nav>
+        ) : null}
       </div>
-    </section>
+    </header>
   );
 }

@@ -96,7 +96,11 @@ export default function ViewListScreen({ entity, type }) {
             {data.map((item) => (
               <Link
                 key={item.id}
-                href={`/view?entity=${entity}&id=${item.id}`}
+                href={
+                  isProduct
+                    ? `/products/${item.id}`
+                    : `/view?entity=${entity}&id=${item.id}`
+                }
                 className="group rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-lg"
               >
                 <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-blue-50 text-2xl">
