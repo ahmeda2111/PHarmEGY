@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { isStaffRole } from "../../../lib/roles";
 import { useAuth } from "../../../lib/useAuth";
+import HeaderSearch from "./HeaderSearch";
+import ThemeToggle from "./ThemeToggle";
 import UserMenu from "./UserMenu";
 
 const productTypes = [
@@ -15,6 +17,7 @@ export default function TopBar() {
   const { user, profile } = useAuth();
   const [productsOpen, setProductsOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const menuRef = useRef(null);
   const barRef = useRef(null);
   const showAdmin = isStaffRole(profile?.role || user?.user_metadata?.role);
@@ -33,6 +36,7 @@ export default function TopBar() {
       if (event.key === "Escape") {
         setProductsOpen(false);
         setMobileOpen(false);
+        setSearchOpen(false);
       }
     };
 
@@ -48,6 +52,7 @@ export default function TopBar() {
   const closeMenus = () => {
     setProductsOpen(false);
     setMobileOpen(false);
+    setSearchOpen(false);
   };
 
   return (
@@ -62,6 +67,7 @@ export default function TopBar() {
             onClick={() => {
               setMobileOpen((value) => !value);
               setProductsOpen(false);
+              setSearchOpen(false);
             }}
           >
             {mobileOpen ? (
@@ -79,11 +85,11 @@ export default function TopBar() {
             <img
               src="/assets/05_Wordmark/PHarmEGY_Wordmark_Transparent.png"
               alt="PHarmEGY"
-              className="h-7 w-auto max-w-[9.5rem] object-contain object-left sm:h-8 sm:max-w-none"
+              className="h-7 w-auto max-w-[7.5rem] object-contain object-left sm:h-8 sm:max-w-[9.5rem] md:max-w-none dark:brightness-0 dark:invert"
             />
           </Link>
 
-          <nav className="hidden min-w-0 flex-1 items-center gap-1 md:flex lg:gap-2">
+          <nav className="hidden min-w-0 items-center gap-1 md:flex lg:gap-2">
             <div className="relative" ref={menuRef}>
               <button
                 type="button"
@@ -135,11 +141,32 @@ export default function TopBar() {
             </Link>
           </nav>
 
-          <div className="ml-auto flex min-w-0 shrink-0 items-center gap-2">
+          <div className="hidden min-w-0 flex-1 md:block">
+            <HeaderSearch />
+          </div>
+
+          <div className="ml-auto flex min-w-0 shrink-0 items-center gap-1 sm:gap-2">
+            <button
+              type="button"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-700 hover:bg-slate-100 md:hidden"
+              aria-label={searchOpen ? "Close search" : "Open search"}
+              aria-expanded={searchOpen}
+              onClick={() => {
+                setSearchOpen((value) => !value);
+                setMobileOpen(false);
+                setProductsOpen(false);
+              }}
+            >
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="7" />
+                <path strokeLinecap="round" d="M20 20l-3-3" />
+              </svg>
+            </button>
+            <ThemeToggle />
             {showAdmin ? (
               <Link
                 href="/admin"
-                className="hidden rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 sm:inline-flex"
+                className="hidden rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 sm:inline-flex dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
               >
                 Admin
               </Link>
@@ -147,6 +174,12 @@ export default function TopBar() {
             <UserMenu />
           </div>
         </div>
+
+        {searchOpen ? (
+          <div className="border-t border-slate-200 py-3 md:hidden">
+            <HeaderSearch autoFocus onNavigate={() => setSearchOpen(false)} />
+          </div>
+        ) : null}
 
         {mobileOpen ? (
           <nav className="space-y-1 border-t border-slate-200 py-3 md:hidden">

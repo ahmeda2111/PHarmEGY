@@ -6,6 +6,7 @@ export default async function ViewListPage({ searchParams }) {
 
   const entity = params?.entity || "products";
   const type = params?.type || null;
+  const q = params?.q || null;
 
-  return <ViewListScreen entity={entity} type={type} />;
+  return <ViewListScreen entity={entity} type={type} q={q} />;
 }

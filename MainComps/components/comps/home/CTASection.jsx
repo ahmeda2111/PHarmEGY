@@ -16,7 +16,7 @@ export default function CTASection() {
 
         <Link
           href="/view-list?entity=products"
-          className="mt-8 inline-block rounded-lg bg-white px-6 py-3 font-semibold text-blue-600 transition hover:bg-blue-50"
+          className="keep-light mt-8 inline-block rounded-lg bg-white px-6 py-3 font-semibold text-blue-600 transition hover:bg-blue-50"
         >
           Explore Products
         </Link>

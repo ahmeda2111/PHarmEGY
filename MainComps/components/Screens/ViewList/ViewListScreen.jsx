@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { request } from "../../../requests/request";
 
-export default function ViewListScreen({ entity, type }) {
+export default function ViewListScreen({ entity, type, q }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -18,14 +18,18 @@ export default function ViewListScreen({ entity, type }) {
       setError("");
 
       try {
-        const params =
-          isProduct && type
-            ? {
-                filters: {
-                  type,
-                },
-              }
-            : {};
+        const params = {};
+
+        if (isProduct && type) {
+          params.filters = { type };
+        }
+
+        if (q) {
+          params.search = {
+            term: q,
+            columns: ["name", "description"],
+          };
+        }
 
         const result = await request(
           isProduct ? "Products" : "Companies",
@@ -42,7 +46,7 @@ export default function ViewListScreen({ entity, type }) {
     };
 
     getData();
-  }, [isProduct, type]);
+  }, [isProduct, q, type]);
 
   const title =
     entity === "companies"
@@ -64,6 +68,9 @@ export default function ViewListScreen({ entity, type }) {
           <h1 className="mt-2 text-3xl font-bold text-slate-900">
             {title}
           </h1>
+          {q ? (
+            <p className="mt-2 text-slate-600">Results for “{q}”</p>
+          ) : null}
         </div>
 
         {error && (

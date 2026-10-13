@@ -1,8 +1,17 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0f172a;
+  color-scheme: light;
+}
+
+.dark {
+  --background: #020617;
+  --foreground: #e2e8f0;
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -16,7 +25,14 @@ input,
 textarea,
 select {
   background-color: #ffffff;
-  color: #171717;
+  color: #0f172a;
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: #0f172a;
+  color: #e2e8f0;
 }
 
 html,
@@ -29,4 +45,118 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.dark .bg-white:not(.keep-light) {
+  background-color: #0f172a;
+}
+
+.dark .bg-slate-50 {
+  background-color: #020617;
+}
+
+.dark .bg-slate-100 {
+  background-color: #1e293b;
+}
+
+.dark .bg-slate-200 {
+  background-color: #334155;
+}
+
+.dark .bg-blue-50,
+.dark .bg-blue-100 {
+  background-color: rgb(30 58 138 / 0.35);
+}
+
+.dark .bg-red-50 {
+  background-color: rgb(127 29 29 / 0.4);
+}
+
+.dark .bg-amber-50 {
+  background-color: rgb(120 53 15 / 0.4);
+}
+
+.dark .hover\:bg-slate-50:hover,
+.dark .hover\:bg-slate-100:hover {
+  background-color: #1e293b;
+}
+
+.dark .hover\:bg-blue-50:hover {
+  background-color: rgb(30 58 138 / 0.45);
+}
+
+.dark .hover\:bg-red-50:hover {
+  background-color: rgb(127 29 29 / 0.5);
+}
+
+.dark .border-slate-100,
+.dark .border-slate-200 {
+  border-color: #1e293b;
+}
+
+.dark .border-slate-300 {
+  border-color: #334155;
+}
+
+.dark .border-red-200 {
+  border-color: #7f1d1d;
+}
+
+.dark .text-slate-900 {
+  color: #f8fafc;
+}
+
+.dark .text-slate-800 {
+  color: #f1f5f9;
+}
+
+.dark .text-slate-700 {
+  color: #e2e8f0;
+}
+
+.dark .text-slate-600 {
+  color: #cbd5e1;
+}
+
+.dark .text-slate-500 {
+  color: #94a3b8;
+}
+
+.dark .text-slate-400 {
+  color: #94a3b8;
+}
+
+.dark .text-red-700 {
+  color: #fca5a5;
+}
+
+.dark .text-amber-800 {
+  color: #fcd34d;
+}
+
+.dark .placeholder\:text-slate-400::placeholder {
+  color: #64748b;
+}
+
+.dark .disabled\:bg-slate-100:disabled {
+  background-color: #1e293b;
+}
+
+input.bg-transparent,
+textarea.bg-transparent,
+.dark input.bg-transparent,
+.dark textarea.bg-transparent {
+  background-color: transparent;
 }
