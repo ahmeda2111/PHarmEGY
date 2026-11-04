@@ -3,15 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
-import { request } from "../../../requests/request";
-
-function sanitizeSearch(value) {
-  return String(value || "")
-    .trim()
-    .replace(/[%_,()]/g, " ")
-    .replace(/\s+/g, " ")
-    .slice(0, 80);
-}
+import { sanitizeSearchTerm } from "../../../services/Queries/queryActions";
+import { request } from "../../../services/requests/request";
 
 function itemHref(kind, item) {
   if (kind === "product") return `/products/${item.id}`;
@@ -26,18 +19,21 @@ export default function HeaderSearch({ autoFocus = false, onNavigate }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState({ products: [], companies: [] });
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const term = sanitizeSearch(query);
+    const term = sanitizeSearchTerm(query);
 
     if (term.length < 2) {
       setResults({ products: [], companies: [] });
+      setError("");
       setLoading(false);
       return;
     }
 
     let active = true;
     setLoading(true);
+    setError("");
 
     const timer = window.setTimeout(async () => {
       try {
@@ -52,8 +48,10 @@ export default function HeaderSearch({ autoFocus = false, onNavigate }) {
           products: products || [],
           companies: companies || [],
         });
-      } catch {
-        if (active) setResults({ products: [], companies: [] });
+      } catch (searchError) {
+        if (!active) return;
+        setResults({ products: [], companies: [] });
+        setError(searchError.message || "Search failed.");
       } finally {
         if (active) setLoading(false);
       }
@@ -74,7 +72,7 @@ export default function HeaderSearch({ autoFocus = false, onNavigate }) {
     return () => document.removeEventListener("pointerdown", handlePointerDown);
   }, []);
 
-  const term = sanitizeSearch(query);
+  const term = sanitizeSearchTerm(query);
   const hasQuery = term.length >= 2;
   const empty = !loading && hasQuery && !results.products.length && !results.companies.length;
 
@@ -129,7 +127,11 @@ export default function HeaderSearch({ autoFocus = false, onNavigate }) {
             <p className="px-3 py-3 text-sm text-slate-500">Searching...</p>
           ) : null}
 
-          {empty ? (
+          {error ? (
+            <p className="px-3 py-3 text-sm text-red-700">{error}</p>
+          ) : null}
+
+          {empty && !error ? (
             <p className="px-3 py-3 text-sm text-slate-500">No matches found.</p>
           ) : null}
 

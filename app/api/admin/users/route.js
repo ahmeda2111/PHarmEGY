@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { getUserManager } from "@/MainComps/lib/adminAuth";
-import { canAssignRole, USER_ROLES } from "@/MainComps/lib/roles";
-import { validatePassword } from "@/MainComps/lib/authValidation";
+import { getUserManager } from "@/MainComps/services/adminAuth";
+import { canAssignRole, USER_ROLES } from "@/MainComps/services/roles";
+import { validatePassword } from "@/MainComps/services/authValidation";
 
 function jsonError(message, status = 400) {
   return NextResponse.json({ error: message }, { status });

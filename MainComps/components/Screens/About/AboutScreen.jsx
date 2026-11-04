@@ -1,5 +1,7 @@
 
 import Link from "next/link";
+import MainText from "../../comps/MainTextComponent";
+import MainButton from "../../comps/MainButton";
 
 export default function AboutScreen() {
   return (
@@ -26,18 +28,16 @@ export default function AboutScreen() {
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4">
-                <Link
-                  href="/view-list?entity=products"
-                  className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700"
-                >
-                  Explore Products
+                <Link href="/view-list?entity=products">
+                  <MainButton>
+                    <MainText>Explore Products</MainText>
+                  </MainButton>
                 </Link>
 
-                <Link
-                  href="/view-list?entity=companies"
-                  className="rounded-lg border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-700 transition hover:bg-slate-100"
-                >
-                  Our Companies
+                <Link href="/view-list?entity=companies">
+                  <MainButton variant="outline">
+                    <MainText>Our Companies</MainText>
+                  </MainButton>
                 </Link>
               </div>
             </div>
@@ -329,11 +329,10 @@ export default function AboutScreen() {
             Discover our products and explore the companies behind them.
           </p>
 
-          <Link
-            href="/view-list?entity=products"
-            className="mt-8 inline-block rounded-lg bg-white px-6 py-3 font-semibold text-blue-600 transition hover:bg-blue-50"
-          >
-            Explore Products
+          <Link href="/view-list?entity=products" className="mt-8 inline-block">
+            <MainButton variant="secondary">
+              <MainText>Explore Products</MainText>
+            </MainButton>
           </Link>
         </div>
       </section>

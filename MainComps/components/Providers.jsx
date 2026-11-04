@@ -1,18 +1,28 @@
 "use client";
 
-import { ToastProvider } from "../lib/useToast";
-import { AuthProvider } from "../lib/useAuth";
-import { ThemeProvider } from "../lib/useTheme";
-import ToastStack from "./comps/ToastStack";
+import { ToastProvider } from "../hooks/useToast";
+import { AuthProvider } from "../hooks/useAuth";
+import { ThemeProvider } from "../hooks/useTheme";
+import { SidebarProvider } from "../hooks/useSidebar";
+import { ModalProvider } from "../hooks/useModal";
+import ToastStack from "./comps/ToastStackComponent";
+import Sidebar from "./comps/Sidebar";
+import Modal from "./comps/Modal";
 
 export default function Providers({ children }) {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <ToastProvider>
-          {children}
-          <ToastStack />
-        </ToastProvider>
+        <ModalProvider>
+          <SidebarProvider>
+            <ToastProvider>
+              {children}
+              <ToastStack />
+              <Sidebar />
+              <Modal />
+            </ToastProvider>
+          </SidebarProvider>
+        </ModalProvider>
       </AuthProvider>
     </ThemeProvider>
   );

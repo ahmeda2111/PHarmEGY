@@ -1,43 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { deleteProduct } from "../../../lib/adminActions";
-import { useToast } from "../../../lib/useToast";
-import { request } from "../../../requests/request";
+import { useState } from "react";
+import List from "../../comps/ListComponent";
+import MainText from "../../comps/MainTextComponent";
+import MainButton from "../../comps/MainButton";
+import { deleteProduct } from "../../../services/adminActions";
+import { useToast } from "../../../hooks/useToast";
+import { useGetItems } from "../../../hooks/useGetItems";
 import AdminGuard from "./AdminGuard";
 
 export default function AdminProductsScreen() {
   const { showToast } = useToast();
-  const [products, setProducts] = useState([]);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      setError("");
-
-      try {
-        const data = await request("Products");
-        setProducts(data || []);
-      } catch (loadError) {
-        setError(loadError.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    load();
-  }, []);
+  const { items: products, loading, error, refetch } = useGetItems("Products");
+  const [localError, setLocalError] = useState("");
 
   const handleDelete = async (product) => {
     try {
       await deleteProduct(product.id);
-      setProducts((current) => current.filter((item) => item.id !== product.id));
+      refetch();
       showToast("Product deleted.", "delete");
     } catch (deleteError) {
-      setError(deleteError.message);
+      setLocalError(deleteError.message);
     }
   };
 
@@ -48,85 +32,35 @@ export default function AdminProductsScreen() {
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <Link href="/admin" className="text-sm font-semibold text-blue-600">
-                ← Admin Panel
+                <MainText>← Admin Panel</MainText>
               </Link>
-              <h1 className="mt-3 text-3xl font-bold text-slate-900">
+              <MainText as="h1" className="mt-3 text-3xl font-bold text-slate-900">
                 Products
-              </h1>
+              </MainText>
             </div>
 
-            <Link
-              href="/admin/products/new"
-              className="rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white hover:bg-blue-700"
-            >
-              Add product
+            <Link href="/admin/products/new">
+              <MainButton>
+                <MainText>Add product</MainText>
+              </MainButton>
             </Link>
           </div>
 
-          {error ? (
-            <p className="mt-6 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
-              {error}
-            </p>
+          {error || localError ? (
+            <MainText as="p" className="mt-6 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
+              {localError || error}
+            </MainText>
           ) : null}
 
-          {loading ? (
-            <div className="mt-8 h-40 animate-pulse rounded-3xl bg-white" />
-          ) : (
-            <div className="mt-8 overflow-hidden rounded-3xl border border-slate-200 bg-white">
-              {products.length === 0 ? (
-                <p className="p-8 text-slate-500">No products yet.</p>
-              ) : (
-                <table className="w-full text-left">
-                  <thead className="border-b border-slate-200 bg-slate-50 text-sm text-slate-500">
-                    <tr>
-                      <th className="px-6 py-4 font-medium">Name</th>
-                      <th className="px-6 py-4 font-medium">Type</th>
-                      <th className="px-6 py-4 font-medium">Company</th>
-                      <th className="px-6 py-4 font-medium" />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {products.map((product) => (
-                      <tr key={product.id} className="border-b border-slate-100">
-                        <td className="px-6 py-4 font-medium text-slate-900">
-                          {product.name}
-                        </td>
-                        <td className="px-6 py-4 text-slate-600">
-                          {product.type}
-                        </td>
-                        <td className="px-6 py-4 text-slate-600">
-                          {product.company?.name || "—"}
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex justify-end gap-4">
-                            <Link
-                              href={`/products/${product.id}`}
-                              className="font-semibold text-slate-600 hover:text-slate-900"
-                            >
-                              View
-                            </Link>
-                            <Link
-                              href={`/admin/products/${product.id}`}
-                              className="font-semibold text-blue-600 hover:text-blue-700"
-                            >
-                              Edit
-                            </Link>
-                            <button
-                              type="button"
-                              onClick={() => handleDelete(product)}
-                              className="font-semibold text-red-600 hover:text-red-700"
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          )}
+          <List
+            view="table"
+            item="adminProduct"
+            data={products}
+            loading={loading}
+            empty="No products yet."
+            className="mt-8"
+            itemProps={{ onDelete: handleDelete }}
+          />
         </div>
       </main>
     </AdminGuard>

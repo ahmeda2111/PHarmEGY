@@ -1,5 +1,6 @@
-
 import Link from "next/link";
+import MainText from "../MainTextComponent";
+import MainButton from "../MainButton";
 
 export default function HeroSection() {
   return (
@@ -7,35 +8,39 @@ export default function HeroSection() {
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
-            <span className="inline-flex rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700">
+            <MainText
+              as="span"
+              className="inline-flex rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700"
+            >
               PHarmEGY
-            </span>
+            </MainText>
 
-            <h1 className="mt-6 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+            <MainText
+              as="h1"
+              className="mt-6 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl"
+            >
               Discover trusted
-              <span className="block text-blue-600">
+              <MainText as="span" className="block text-blue-600">
                 pharmaceutical products
-              </span>
-            </h1>
+              </MainText>
+            </MainText>
 
-            <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600">
+            <MainText as="p" className="mt-6 max-w-xl text-lg leading-8 text-slate-600">
               Discover pharmaceutical products and explore trusted
               pharmaceutical companies in one modern platform.
-            </p>
+            </MainText>
 
             <div className="mt-8 flex flex-wrap gap-4">
-              <Link
-                href="/view-list?entity=products"
-                className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700"
-              >
-                Explore our products
+              <Link href="/view-list?entity=products">
+                <MainButton>
+                  <MainText>Explore our products</MainText>
+                </MainButton>
               </Link>
 
-              <Link
-                href="/about"
-                className="rounded-lg border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-700 transition hover:bg-slate-100"
-              >
-                About Us
+              <Link href="/about">
+                <MainButton variant="outline">
+                  <MainText>About Us</MainText>
+                </MainButton>
               </Link>
             </div>
           </div>
@@ -49,9 +54,9 @@ export default function HeroSection() {
                   className="mx-auto h-40 w-auto"
                 />
 
-                <p className="mt-4 text-sm text-slate-500">
+                <MainText as="p" className="mt-4 text-sm text-slate-500">
                   Pharmaceutical Products Platform
-                </p>
+                </MainText>
               </div>
             </div>
           </div>
@@ -60,4 +65,3 @@ export default function HeroSection() {
     </section>
   );
 }
-

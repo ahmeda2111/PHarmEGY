@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { saveCompany } from "../../../lib/adminActions";
-import { useAuth } from "../../../lib/useAuth";
-import { useToast } from "../../../lib/useToast";
-import { request } from "../../../requests/request";
+import { saveCompany } from "../../../services/adminActions";
+import { useAuth } from "../../../hooks/useAuth";
+import { useToast } from "../../../hooks/useToast";
+import { useGetItems } from "../../../hooks/useGetItems";
+import MainText from "../../comps/MainTextComponent";
+import MainButton from "../../comps/MainButton";
 import AdminGuard from "./AdminGuard";
 
 const emptyForm = {
@@ -21,39 +23,27 @@ export default function AdminCompanyFormScreen({ companyId }) {
   const { showToast } = useToast();
   const [form, setForm] = useState(emptyForm);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(Boolean(companyId));
   const [saving, setSaving] = useState(false);
   const isEdit = Boolean(companyId);
 
+  const { items, loading } = useGetItems(
+    "Companies",
+    companyId ? { filters: { id: companyId } } : { __skip: true }
+  );
+
+  const company = items?.[0];
+
   useEffect(() => {
-    if (!companyId) return;
-
-    const load = async () => {
-      try {
-        const rows = await request("Companies", {
-          filters: { id: companyId },
-        });
-        const company = rows?.[0];
-
-        if (!company) {
-          setError("Company not found.");
-          return;
-        }
-
-        setForm({
-          name: company.name || "",
-          description: company.description || "",
-          is_contracted: Boolean(company.is_contracted),
-        });
-      } catch (loadError) {
-        setError(loadError.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    load();
-  }, [companyId]);
+    if (company) {
+      setForm({
+        name: company.name || "",
+        description: company.description || "",
+        is_contracted: Boolean(company.is_contracted),
+      });
+    } else if (isEdit && !loading) {
+      setError("Company not found.");
+    }
+  }, [company, isEdit, loading]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -157,13 +147,9 @@ export default function AdminCompanyFormScreen({ companyId }) {
                 </p>
               ) : null}
 
-              <button
-                type="submit"
-                disabled={saving}
-                className="rounded-lg bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700 disabled:opacity-70"
-              >
-                {saving ? "Saving..." : isEdit ? "Save changes" : "Add company"}
-              </button>
+              <MainButton type="submit" disabled={saving} fullWidth>
+                <MainText>{saving ? "Saving..." : isEdit ? "Save changes" : "Add company"}</MainText>
+              </MainButton>
             </form>
           )}
         </div>

@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { getUserAvatar, getUserName, useAuth } from "../../../lib/useAuth";
+import { getUserAvatar, getUserName, useAuth } from "../../../hooks/useAuth";
+import { isStaffRole } from "../../../services/roles";
+import MainText from "../MainTextComponent";
+import MainButton from "../MainButton";
 
 const accountLinks = [
   { href: "/account", label: "Profile" },
@@ -37,7 +40,7 @@ function UserAvatar({ user, profile }) {
     return (
       <img
         src={avatar}
-        alt=""
+        alt={name}
         className="h-9 w-9 shrink-0 rounded-full object-cover"
       />
     );
@@ -54,6 +57,7 @@ export default function UserMenu() {
   const { user, profile, signOut } = useAuth();
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
+  const showAdmin = isStaffRole(profile?.role || user?.user_metadata?.role);
 
   useEffect(() => {
     if (!open) return;
@@ -86,18 +90,16 @@ export default function UserMenu() {
           <EmptyAvatar />
         </span>
 
-        <Link
-          href="/login"
-          className="rounded-lg bg-blue-600 px-2.5 py-2 text-xs font-semibold text-white transition hover:bg-blue-700 sm:px-4 sm:text-sm"
-        >
-          Log in
+        <Link href="/login">
+          <MainButton size="small">
+            <MainText>Log in</MainText>
+          </MainButton>
         </Link>
 
-        <Link
-          href="/signup"
-          className="rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 sm:px-4 sm:text-sm"
-        >
-          Sign up
+        <Link href="/signup">
+          <MainButton variant="outline" size="small">
+            <MainText>Sign up</MainText>
+          </MainButton>
         </Link>
       </div>
     );
@@ -148,6 +150,17 @@ export default function UserMenu() {
               {item.label}
             </Link>
           ))}
+
+          {showAdmin && (
+            <Link
+              href="/admin"
+              role="menuitem"
+              onClick={() => setOpen(false)}
+              className="block rounded-lg px-4 py-3 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+            >
+              Admin Panel
+            </Link>
+          )}
 
           <button
             type="button"

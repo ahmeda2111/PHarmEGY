@@ -1,44 +1,18 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
-
 import HeroSection from "../../comps/home/HeroSection";
-// import ExploreSection from "../../comps/home/ExploreSection";
 import ProductsSection from "../../comps/home/ProductsSection";
 import CTASection from "../../comps/home/CTASection";
 
-import { request } from "../../../requests/request";
+import { useGetItems } from "../../../hooks/useGetItems";
 
 export default function HomeScreen() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const getProducts = async () => {
-      setLoading(true);
-      setError("");
-
-      try {
-        const data = await request("Products");
-
-        setProducts(data || []);
-      } catch (error) {
-        setError(error.message);
-        setProducts([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getProducts();
-  }, []);
+  const { items: products, loading, error } = useGetItems("Products");
 
   return (
     <main className="min-h-screen bg-white">
       <HeroSection />
-      {/* <ExploreSection /> */}
 
       {error && (
         <div className="mx-auto max-w-7xl px-6 pt-6 lg:px-8">

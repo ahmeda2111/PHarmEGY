@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { getProfileForAuthUser } from "./authActions";
-import { supabase } from "./supabase";
+import { getProfileForAuthUser } from "../services/authActions";
+import { supabase } from "../services/supabase";
 
 const AuthContext = createContext(null);
 

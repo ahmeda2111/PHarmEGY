@@ -1,3 +1,11 @@
+export function sanitizeSearchTerm(value) {
+  return String(value || "")
+    .trim()
+    .replace(/[%_,()]/g, " ")
+    .replace(/\s+/g, " ")
+    .slice(0, 80);
+}
+
 export const queryActions = {
   filters: (query, value) =>
     Object.entries(value).reduce(
@@ -7,10 +15,7 @@ export const queryActions = {
     ),
 
   search: (query, value) => {
-    const term = String(value?.term || "")
-      .trim()
-      .replace(/[%_,()]/g, " ")
-      .replace(/\s+/g, " ");
+    const term = sanitizeSearchTerm(value?.term);
 
     if (!term) return query;
 

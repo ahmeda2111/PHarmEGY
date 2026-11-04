@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { saveProduct } from "../../../lib/adminActions";
-import { useAuth } from "../../../lib/useAuth";
-import { useToast } from "../../../lib/useToast";
-import { request } from "../../../requests/request";
+import { saveProduct } from "../../../services/adminActions";
+import { useAuth } from "../../../hooks/useAuth";
+import { useToast } from "../../../hooks/useToast";
+import { useGetItems } from "../../../hooks/useGetItems";
+import MainText from "../../comps/MainTextComponent";
+import MainButton from "../../comps/MainButton";
 import AdminGuard from "./AdminGuard";
 
 const productTypes = [
@@ -26,45 +28,32 @@ export default function AdminProductFormScreen({ productId }) {
   const { profile } = useAuth();
   const { showToast } = useToast();
   const [form, setForm] = useState(emptyForm);
-  const [companies, setCompanies] = useState([]);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(Boolean(productId));
   const [saving, setSaving] = useState(false);
   const isEdit = Boolean(productId);
 
+  const { items: companies } = useGetItems("Companies");
+  const { items: products, loading } = useGetItems(
+    "Products",
+    productId ? { filters: { id: productId } } : { __skip: true }
+  );
+
+  const companiesList = companies || [];
+
+  const product = products?.[0];
+
   useEffect(() => {
-    const load = async () => {
-      try {
-        const companyRows = await request("Companies");
-        setCompanies(companyRows || []);
-
-        if (!productId) return;
-
-        const rows = await request("Products", {
-          filters: { id: productId },
-        });
-        const product = rows?.[0];
-
-        if (!product) {
-          setError("Product not found.");
-          return;
-        }
-
-        setForm({
-          name: product.name || "",
-          description: product.description || "",
-          type: product.type || "medicine",
-          company_id: product.company_id || "",
-        });
-      } catch (loadError) {
-        setError(loadError.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    load();
-  }, [productId]);
+    if (product) {
+      setForm({
+        name: product.name || "",
+        description: product.description || "",
+        type: product.type || "medicine",
+        company_id: product.company_id || "",
+      });
+    } else if (isEdit && !loading) {
+      setError("Product not found.");
+    }
+  }, [product, isEdit, loading]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -166,7 +155,7 @@ export default function AdminProductFormScreen({ productId }) {
                   className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
                 >
                   <option value="">No company</option>
-                  {companies.map((company) => (
+                  {companiesList.map((company) => (
                     <option key={company.id} value={company.id}>
                       {company.name}
                     </option>
@@ -197,13 +186,9 @@ export default function AdminProductFormScreen({ productId }) {
                 </p>
               ) : null}
 
-              <button
-                type="submit"
-                disabled={saving}
-                className="rounded-lg bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700 disabled:opacity-70"
-              >
-                {saving ? "Saving..." : isEdit ? "Save changes" : "Add product"}
-              </button>
+              <MainButton type="submit" disabled={saving} fullWidth>
+                <MainText>{saving ? "Saving..." : isEdit ? "Save changes" : "Add product"}</MainText>
+              </MainButton>
             </form>
           )}
         </div>

@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getProfileForAuthUser } from "../../../lib/authActions";
-import { useAuth } from "../../../lib/useAuth";
+import { getProfileForAuthUser } from "../../../services/authActions";
+import { useAuth } from "../../../hooks/useAuth";
+import MainText from "../../comps/MainTextComponent";
+import MainButton from "../../comps/MainButton";
 
 function formatDate(value) {
   if (!value) return "—";
@@ -70,11 +72,10 @@ export default function AccountScreen() {
         <div className="mx-auto max-w-3xl px-6 py-16 lg:px-8">
           <h1 className="text-3xl font-bold text-slate-900">Profile</h1>
           <p className="mt-3 text-slate-600">Log in to see your account details.</p>
-          <Link
-            href="/login"
-            className="mt-6 inline-block rounded-lg bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700"
-          >
-            Log in
+          <Link href="/login" className="mt-6 inline-block w-full">
+            <MainButton fullWidth>
+              <MainText>Log in</MainText>
+            </MainButton>
           </Link>
         </div>
       </main>

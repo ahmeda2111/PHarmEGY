@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { isStaffRole } from "../../../lib/roles";
-import { useAuth } from "../../../lib/useAuth";
+import { isStaffRole } from "../../../services/roles";
+import { useAuth } from "../../../hooks/useAuth";
 
 export default function AdminGuard({ children }) {
   const { user, profile, ready } = useAuth();

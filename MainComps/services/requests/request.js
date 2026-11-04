@@ -1,11 +1,9 @@
 
-import { supabase } from "../lib/supabase";
+import { supabase } from "../supabase";
 import { queries } from "../Queries/index";
 
 export async function request(queryName, params = {}) {
   const query = queries[queryName];
-  console.log(queries)
-  console.log(queryName)
 
   if (!query) {
     throw new Error(`Query "${queryName}" not found`);

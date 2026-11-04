@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { signUpAccount } from "../../../lib/authActions";
+import { signUpAccount } from "../../../services/authActions";
 import AuthField from "./AuthField";
+import MainText from "../../comps/MainTextComponent";
+import MainButton from "../../comps/MainButton";
 
 export default function SignupScreen() {
   const router = useRouter();
@@ -128,9 +130,10 @@ export default function SignupScreen() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            {loading ? "Creating account..." : "Create account"}
+            <MainButton fullWidth>
+              <MainText>{loading ? "Creating account..." : "Create account"}</MainText>
+            </MainButton>
           </button>
         </form>
 

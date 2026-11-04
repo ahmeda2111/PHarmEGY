@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import MainText from "../../comps/MainTextComponent";
+import MainButton from "../../comps/MainButton";
 
 export default function CheckEmailScreen() {
   const searchParams = useSearchParams();
@@ -35,11 +37,10 @@ export default function CheckEmailScreen() {
           If you don&apos;t see it, check your Spam or Junk folder.
         </p>
 
-        <Link
-          href="/login"
-          className="mt-8 inline-block w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700"
-        >
-          Go to Log in
+        <Link href="/login" className="mt-8 inline-block w-full">
+          <MainButton fullWidth>
+            <MainText>Go to Log in</MainText>
+          </MainButton>
         </Link>
       </div>
     </main>

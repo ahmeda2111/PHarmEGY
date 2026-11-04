@@ -1,4 +1,4 @@
-import { getAuthRedirectUrl } from "./siteUrl";
+import { getAuthRedirectUrl } from "../utils/siteUrl";
 import { supabase } from "./supabase";
 import {
   isEmail,
@@ -159,16 +159,6 @@ export async function signUpAccount(form) {
       fieldErrors: { ...fieldErrors, email: "This email is already registered." },
     };
   }
-
-  // if (data.user) {
-  //   try {
-  //     await ensureUserProfile(data.user, { fullName, phone, email });
-  //   } catch (profileError) {
-  //     if (data.session) {
-  //       return { error: profileError.message, fieldErrors };
-  //     }
-  //   }
-  // }
 
   if (!data.session) {
     return {

@@ -1,6 +1,6 @@
 "use client";
 
-import { request } from "../requests/request";
+import { request } from "./requests/request";
 import { supabase } from "./supabase";
 
 export async function saveProduct(values, profile) {
@@ -123,20 +123,22 @@ async function getAccessToken() {
 }
 
 export async function listManagedUsers() {
-  try {
-    const token = await getAccessToken();
-    const response = await fetch("/api/admin/users", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  const token = await getAccessToken();
+  const response = await fetch("/api/admin/users", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
-    if (response.ok) {
-      const payload = await response.json();
-      return payload.users || [];
-    }
-  } catch {
-    // Fall back to a direct table query when the admin API is not configured.
+  if (response.ok) {
+    const payload = await response.json();
+    return payload.users || [];
+  }
+
+  const payload = await response.json().catch(() => ({}));
+
+  if (response.status === 401) {
+    throw new Error(payload.error || "You are not allowed to manage users.");
   }
 
   const data = await request("Users", {

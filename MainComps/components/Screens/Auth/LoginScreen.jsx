@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { signInAccount } from "../../../lib/authActions";
+import { signInAccount } from "../../../services/authActions";
 import AuthField from "./AuthField";
+import MainText from "../../comps/MainTextComponent";
+import MainButton from "../../comps/MainButton";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -81,13 +83,9 @@ export default function LoginScreen() {
             </p>
           ) : null}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
-          >
-            {loading ? "Logging in..." : "Log in"}
-          </button>
+          <MainButton type="submit" disabled={loading} fullWidth>
+            <MainText>{loading ? "Logging in..." : "Log in"}</MainText>
+          </MainButton>
         </form>
 
         <p className="mt-8 text-sm text-slate-600">

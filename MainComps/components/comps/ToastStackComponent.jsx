@@ -1,6 +1,6 @@
 "use client";
 
-import { useToast } from "../../lib/useToast";
+import { useToast } from "../../hooks/useToast";
 
 export default function ToastStack() {
   const { toasts } = useToast();
